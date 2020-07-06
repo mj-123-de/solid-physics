@@ -1,0 +1,64 @@
+#include<stdio.h>
+#include<math.h>
+#define PI 3.1415926
+
+void f1() {               /*分数坐标转换为直角坐标*/
+	double a, b, c, u, v, w, x1, y1, z1, x, y, z, t;
+	printf("请依次输入晶胞常数a,b,c,α,β,γ（角度制）:（用空格或回车键分隔数据，最后按回车键）\n");
+	fflush(stdin);
+	scanf_s("%lf%lf%lf%lf%lf%lf", &a, &b, &c, &u, &v, &w);
+	u = u * PI / 180.0;
+	v = v * PI / 180.0;
+	w = w * PI / 180.0;               /*转换为弧度制*/
+	fflush(stdin);
+	printf("请依次输入分数坐标x1,y1,z1:（用空格或回车键分隔数据，最后按回车键执行）\n");
+	scanf_s("%lf%lf%lf", &x1, &y1, &z1);
+	t = (cos(u) - cos(v) * cos(w)) / sin(w);
+	x = a * x1 + b * cos(w) * y1 + c * cos(v) * z1;
+	y = b * sin(w) * y1 + c * t * z1;
+	z = c * sqrt(sin(v) * sin(v) - t * t) * z1;         /*利用分数坐标转换矩阵求解*/
+	printf("直角坐标： x=%lf  y=%lf  z=%lf\n", x, y, z);
+}
+
+void f2() {               /*直角坐标转换为分数坐标*/
+	double a, b, c, u, v, w, x1, y1, z1, x, y, z, t;
+	printf("请依次输入晶胞常数a,b,c,α,β,γ（角度制）:（用空格或回车键分隔数据，最后按回车键）\n");
+	fflush(stdin);
+	scanf_s("%lf%lf%lf%lf%lf%lf", &a, &b, &c, &u, &v, &w);
+	u = u * PI / 180.0;
+	v = v * PI / 180.0;
+	w = w * PI / 180.0;             /*转换为弧度制*/
+	printf("请依次输入直角坐标x,y,z:（用空格或回车键分隔数据，最后按回车键执行）\n");
+	fflush(stdin);
+	scanf_s("%lf%lf%lf", &x, &y, &z);
+	t = (cos(u) - cos(v) * cos(w)) / sin(w);
+	x1 = x / a - y * cos(w) / a / sin(w) + z * (cos(w) * t - cos(v) * sin(w)) / a / sin(w) / sqrt(sin(v) * sin(v) - t * t);
+	y1 = y / b / sin(w) - z * t / b / sin(w) / sqrt(sin(v) * sin(v) - t * t);
+	z1 = z / c / sqrt(sin(v) * sin(v) - t * t);         /*利用直角坐标转换矩阵求解*/
+	printf("分数坐标： x1=%lf  y1=%lf  z1=%lf\n", x1, y1, z1);
+}
+
+int main(){
+	int n;
+	printf("# 任意元胞中原子直角坐标和分数坐标相互转换 #\n");
+	while (1) {
+		printf("\n1:分数坐标转换为直角坐标\n");
+		printf("2:直角坐标转换为分数坐标\n");
+		printf("3:退出程序\n");
+		printf("请输入数字选择要执行的功能：（输入数字后按回车键开始执行）\n");
+		fflush(stdin);
+		scanf_s("%d",&n);
+		printf("\n");
+		if (n == 3)
+			return 0;
+		switch (n)
+		{
+		case 1:  f1(); break;
+		case 2:  f2(); break;
+		default:  
+			printf("输入的数字不正确,请重新输入！\n");
+			break;
+		}
+	}
+	return 0;
+}
